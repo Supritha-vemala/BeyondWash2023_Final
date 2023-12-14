@@ -9,65 +9,6 @@ const {width, height} = Dimensions.get('window');
 
 const FeedbackDetails = () => {
   const route = useRoute(); // Use useRoute to access the route object
-  const data = [
-    {
-      email: 'shekar6803@gmail.com',
-      type: 'Customer Service',
-      comment:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-    },
-    {
-      email: 'shekar6803@gmail.com',
-      type: 'Customer Service',
-      comment: 'Lorem Ipsum is simply dummy text of the printing',
-    },
-    {
-      email: 'shekar6803@gmail.com',
-      type: 'Customer Service',
-      comment:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard',
-    },
-    {
-      email: 'shekar6803@gmail.com',
-      type: 'Customer Service',
-      comment: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
-    },
-    {
-      email: 'shekar6803@gmail.com',
-      type: 'Customer Service',
-      comment:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard',
-    },
-    {
-      email: 'shekar6803@gmail.com',
-      type: 'Customer Service',
-      comment:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-    },
-    {
-      email: 'shekar6803@gmail.com',
-      type: 'Customer Service',
-      comment: 'Lorem Ipsum is simply dummy text of the printing',
-    },
-    {
-      email: 'shekar6803@gmail.com',
-      type: 'Customer Service',
-      comment:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard',
-    },
-    {
-      email: 'shekar6803@gmail.com',
-      type: 'Customer Service',
-      comment: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
-    },
-    {
-      email: 'shekar6803@gmail.com',
-      type: 'Customer Service',
-      comment:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard',
-    },
-  ];
-
   const renderItem = ({item}) => {
     return (
       <View style={styles.DetailsContainer}>
