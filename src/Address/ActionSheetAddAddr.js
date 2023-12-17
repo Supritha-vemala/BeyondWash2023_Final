@@ -15,17 +15,18 @@ import _ from 'lodash';
 import {LoginReducerUpdate} from '../../hooks/Slice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import LoadingButton from '../components/Button/LoadingButton';
 
 const {width, height} = Dimensions.get('window');
 
 let addrType = [
   {
     id: 0,
-    type: 'Home',
+    type: 'Appartment',
   },
   {
     id: 1,
-    type: 'Appartment',
+    type: 'Home',
   },
   {
     id: 2,
@@ -35,14 +36,16 @@ let addrType = [
 
 const ActionSheetAddAddr = ({location, selecedLcation}) => {
   const [addressTypeId, setaddressTypeId] = useState(0);
-  const [selectedAddrType, setselectedAddrType] = useState('');
-  const [selectedFinalAddrType, setselectedFinalAddrType] = useState('Home');
+  const [selectedAddrType, setselectedAddrType] = useState('Appartment');
+  const [selectedFinalAddrType, setselectedFinalAddrType] =
+    useState('Appartment');
   const [completeAddress, setcompleteAddress] = useState(
     '#183/1, 3rd Cross, Madhura Nagar, Moodalpalya main road, Bangalore',
   );
   const [parkingLocation, setparkingLocation] = useState('Primodial Block');
   const [parkingNumber, setparkingNumber] = useState('00283B');
   const [pinCode, setpinCode] = useState('560072');
+  const [Loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const reducer = useSelector(state => state.globalStore);
   const navigation = useNavigation();
@@ -74,6 +77,7 @@ const ActionSheetAddAddr = ({location, selecedLcation}) => {
 
   const handlePress = async () => {
     let emptyValues;
+    setLoading(true);
     if (selectedAddrType !== 'Appartment') {
       emptyValues = await checkForEmptyValues(completeAddress, pinCode);
     } else {
@@ -137,6 +141,7 @@ const ActionSheetAddAddr = ({location, selecedLcation}) => {
           ); // Set the initial timestamp
           navigation.navigate('HomeScreen');
         });
+      setLoading(false);
       Toast.show({
         type: 'success',
         text1: 'Success',
@@ -234,7 +239,11 @@ const ActionSheetAddAddr = ({location, selecedLcation}) => {
           onChangeText={number => setpinCode(number)}
         />
       </View>
-      <CustomButton onPress={handlePress} title={'Add address'} />
+      <LoadingButton
+        handleSignIn={handlePress}
+        text={'Add address'}
+        loadingProp={Loading}
+      />
     </View>
   );
 };

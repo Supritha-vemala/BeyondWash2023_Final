@@ -1,11 +1,9 @@
+/* eslint-disable react-native/no-inline-styles */
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {
-  Alert,
   Modal,
   StyleSheet,
-  Text,
-  Pressable,
   View,
   Dimensions,
   StatusBar,
@@ -13,7 +11,7 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {useDispatch, useSelector} from 'react-redux';
-import {bookingModalReducer} from '../../hooks/Slice';
+import {CurrentYearReducer, bookingModalReducer} from '../../hooks/Slice';
 
 const {width, height} = Dimensions.get('window');
 
@@ -22,6 +20,7 @@ const CalanderModal = ({mondayDate}) => {
     moment(new Date()).format('YYYY-MM-DD'),
   );
   const modalView = useSelector(state => state.globalStore.bookingModal);
+  const dateYear = useSelector(state => state.globalStore.currentYear);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,10 +38,16 @@ const CalanderModal = ({mondayDate}) => {
         visible={modalView.status}>
         <View style={styles.modalContainer}>
           <Calendar
+            onMonthChange={month => {
+              if (dateYear !== month.year) {
+                dispatch(CurrentYearReducer(month.year));
+              }
+            }}
             style={{
               borderRadius: 20,
               width: width - 20,
-              height: height / 2.6,
+              height: 'auto',
+              padding: 10,
             }}
             onDayPress={day => {
               setSelectedDay(day.dateString);

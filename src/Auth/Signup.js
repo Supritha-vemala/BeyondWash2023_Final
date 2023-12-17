@@ -16,7 +16,6 @@ import {isEmpty} from '../../utilities/utils';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {signup} from './AuthProvider';
 import {useDispatch} from 'react-redux';
-import {ActivityIndicator} from 'react-native';
 import LoadingButton from '../components/Button/LoadingButton';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';

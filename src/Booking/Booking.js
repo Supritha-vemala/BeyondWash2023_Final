@@ -24,6 +24,7 @@ import {updateUserData} from '../Auth/AuthProvider';
 import CalanderModal from './CalanderModal';
 import {bookingModalReducer} from '../../hooks/Slice';
 import _ from 'lodash';
+import LoadingButton from '../components/Button/LoadingButton';
 
 const {width, height} = Dimensions.get('window');
 
@@ -44,6 +45,7 @@ const Booking = () => {
   const [Frequencyvalue, setFrequencyValue] = useState(
     reducer?.selectedPlan.toLowerCase(),
   );
+  const dateYear = useSelector(state => state.globalStore.currentYear);
 
   const [items, setItems] = useState([
     {label: 'Basic  Internal Clean', value: 'Basic  Internal Clean'},
@@ -57,6 +59,7 @@ const Booking = () => {
   ]);
   const modalView = useSelector(state => state.globalStore.bookingModal);
   const [address, setAddress] = useState('');
+  const [Loading, setLoading] = useState(false);
 
   const performAsyncAction = async () => {
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -83,10 +86,14 @@ const Booking = () => {
   }, [modalView.status]);
 
   useEffect(() => {
-    setmondayDate(disableMondaysForYear(2023));
-    console.log('Entering');
+    setmondayDate(disableMondaysForYear(dateYear));
     validateAddress(loggedInUser);
   }, []);
+
+  useEffect(() => {
+    setmondayDate(disableMondaysForYear(dateYear));
+    console.log('Executed First');
+  }, [dateYear]);
 
   const disableMondaysForYear = year => {
     const disabledDays = [];
@@ -130,6 +137,7 @@ const Booking = () => {
   };
 
   const handleGetStarted = async () => {
+    setLoading(true);
     const usersList = await firestore()
       .collection('Users')
       .where('isAdmin', '==', true)
@@ -165,6 +173,7 @@ const Booking = () => {
           new Date(),
           usersList,
         );
+        setLoading(false);
         navigation.navigate('SubscribeSuccess');
       });
   };
@@ -347,10 +356,10 @@ const Booking = () => {
         </View>
       </View>
       <View style={{top: -height * 0.055}}>
-        <CustomButton
-          onPress={() => handleGetStarted()}
-          title={'Get Started'}
-          customWidth={width - 30}
+        <LoadingButton
+          loadingProp={Loading}
+          handleSignIn={handleGetStarted}
+          text={'Get Started'}
         />
       </View>
     </View>

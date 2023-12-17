@@ -295,8 +295,8 @@ const styles = StyleSheet.create({
   },
   profilePicture: {
     borderRadius: 75,
-    width: width / 3.1,
-    height: width / 3.1,
+    width: width / 2.8,
+    height: width / 2.8,
   },
   AddAddressTextContainer: {
     flexDirection: 'row',

@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   successIcon: {
-    alignSelf: 'center',
     marginTop: 20,
     width: width * 0.63,
     height: height * 0.23,

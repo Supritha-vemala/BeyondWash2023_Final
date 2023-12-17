@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import {StatusBar} from 'react-native';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
@@ -18,7 +19,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {sendPushNotficationWhenAppIsOpen} from '../Booking/BookingListener';
 import Employee from './../Employee/Employee';
 import {useFocusEffect} from '@react-navigation/native';
-import {SelectedCarType} from '../../hooks/Slice';
+import {CurrentYearReducer, SelectedCarType} from '../../hooks/Slice';
+import moment from 'moment';
 
 const {width, height} = Dimensions.get('window');
 
@@ -29,13 +31,34 @@ const NewHomeScreen = () => {
   navigationRef.current = navigation;
   const loggedInUser = useSelector(state => state.globalStore.LoggedInUserData);
   useEffect(() => {
-    // const userDocRef = firestore().collection('Users').doc(loggedInUser.uid);
-    // const userSnapshot = userDocRef.get();
-    // dispatch(LoginReducerUpdate(userSnapshot));
     StatusBar.setBarStyle('light-content');
     if (Platform.OS === 'android') {
       StatusBar.setTranslucent(true);
       StatusBar.setBackgroundColor('transparent');
+    }
+    notifationCheck();
+
+    async function notifationCheck() {
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+          {
+            title: 'Geolocation Permission',
+            message: 'Can we access your location?',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === 'granted') {
+          console.log('You can use Geolocation');
+          return true;
+        } else {
+          console.log('You cannot use Geolocation');
+          return false;
+        }
+      } else if (Platform.OS === 'ios') {
+      }
     }
   }, []);
 
@@ -47,6 +70,7 @@ const NewHomeScreen = () => {
   };
 
   useEffect(() => {
+    dispatch(CurrentYearReducer(moment().year()));
     performAsyncAction();
     return () => {
       clearTimeout();

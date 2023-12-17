@@ -18,12 +18,15 @@ import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
 import Toast from 'react-native-toast-message';
 import {useNavigation} from '@react-navigation/native';
+import LoadingButton from '../components/Button/LoadingButton';
 
 const {width, height} = Dimensions.get('window');
 
 const Feedback = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
+  const [Loading, setLoading] = useState(false);
+
   const [commentText, setCommentText] = useState();
   const [items, setItems] = useState([
     {label: 'Customer Care', value: 'Customer Care'},
@@ -31,13 +34,14 @@ const Feedback = () => {
   ]);
   const [DropDownValue, setDropDownValue] = useState();
   const loggedInUser = useSelector(state => state.globalStore.LoggedInUserData);
-  const navigation = useNavigation();
 
+  const navigation = useNavigation();
   const handleConfirm = data => {
     setDropDownValue(data.value);
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     const userDocRef = firestore()
       .collection('userFeedback')
       .doc(loggedInUser.email);
@@ -108,7 +112,11 @@ const Feedback = () => {
           value={commentText}
           onChangeText={text => setCommentText(text)}
         />
-        <CustomButton onPress={handleSubmit} title={'Submit'} />
+        <LoadingButton
+          handleSignIn={handleSubmit}
+          loadingProp={Loading}
+          text={'Submit'}
+        />
       </View>
     </KeyboardAvoidingView>
   );

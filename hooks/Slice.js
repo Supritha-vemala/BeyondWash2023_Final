@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 export const mainSlicer = createSlice({
   name: 'allReducer',
@@ -7,6 +7,7 @@ export const mainSlicer = createSlice({
     LoggedInUserData: {},
     isDrawerOpen: true,
     selectedCarType: {},
+    currentYear: '',
     selectedPlan: '',
     MarkerLocation: '',
     userBookings: [],
@@ -14,12 +15,12 @@ export const mainSlicer = createSlice({
     isCacheThere: false,
     bookingModal: {
       status: false,
-      dateSelected: {}
+      dateSelected: {},
     },
     AdminBookingModal: {
       status: false,
-      dateSelected: {}
-    }
+      dateSelected: {},
+    },
   },
   reducers: {
     LoginReducerUpdate: (state, action) => {
@@ -31,6 +32,9 @@ export const mainSlicer = createSlice({
     },
     SelectedCarType: (state, action) => {
       state.selectedCarType = action.payload;
+    },
+    CurrentYearReducer: (state, action) => {
+      state.currentYear = action.payload;
     },
     selectedPlanType: (state, action) => {
       state.selectedPlan = action.payload;
@@ -47,19 +51,20 @@ export const mainSlicer = createSlice({
     },
     adminBookingModalReducer: (state, action) => {
       state.AdminBookingModal = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const {
   LoginReducerUpdate,
   isDrawerOpen,
   SelectedCarType,
+  CurrentYearReducer,
   selectedPlanType,
   selectedMarkerLocation,
   userBookingsReducer,
   bookingModalReducer,
-  adminBookingModalReducer
+  adminBookingModalReducer,
 } = mainSlicer.actions;
 
 const mainReducer = mainSlicer.reducer;

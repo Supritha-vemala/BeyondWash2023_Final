@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -15,6 +15,7 @@ import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LoginReducerUpdate} from '../../hooks/Slice';
 import {useDispatch, useSelector} from 'react-redux';
+import {ActivityIndicator} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -22,6 +23,7 @@ const SideScreen = () => {
   let BgClr, fontWeight;
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [Loading, setLoading] = useState(false);
   const loggedInUser = useSelector(state => state.globalStore.LoggedInUserData);
   function handleNav(screenName) {
     StatusBar.setBarStyle('light-content');
@@ -65,18 +67,18 @@ const SideScreen = () => {
 
   const handleLogout = async () => {
     try {
+      setLoading(true);
       await auth().signOut();
       const userData = {
         userDetails: {},
         isAuthenticated: false,
       };
       navigation.dispatch(DrawerActions.closeDrawer());
-
       await AsyncStorage.removeItem('@last_login_timestamp'); // Set the initial timestamp
       dispatch(LoginReducerUpdate(userData));
+      setLoading(false);
     } catch (error) {
       console.error('Error while logging out:', error);
-      navigation.navigate('SignUp');
       return 0;
     }
   };
@@ -133,7 +135,7 @@ const SideScreen = () => {
             <Text style={[styles.IconText, styles.SecondaryFont]}>Admin</Text>
           </View>
         ) : null}
-        <View style={styles.Divider}></View>
+        <View style={styles.Divider} />
         <View
           onTouchStart={() => handleNav('PrivacyPolicyScreen')}
           style={styles.MenuSubCotntainer}>
@@ -158,6 +160,12 @@ const SideScreen = () => {
             style={styles.Image}
           />
           <Text style={styles.buttonText}>Logout</Text>
+          {Loading && (
+            <View style={styles.loadingContainer}>
+              <Text style={styles.buttonText}>...</Text>
+              <ActivityIndicator color={'#000'} size={'small'} />
+            </View>
+          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -287,5 +295,8 @@ const styles = StyleSheet.create({
   Image: {
     width: height * 0.023,
     height: height * 0.023,
+  },
+  loadingContainer: {
+    flexDirection: 'row',
   },
 });

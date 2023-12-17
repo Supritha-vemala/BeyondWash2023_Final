@@ -1,9 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import React, {useEffect} from 'react';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import Signup from '../src/Auth/Signup';
 import HomeScreen from '../src/Home/HomeScreen';
-import {useSelector} from 'react-redux';
 import ProfileScreen from '../src/SideScreen/ProfileScreen';
 import AddAddress from '../src/Address/AddAddress';
 import SubscribePlan from '../src/Subscribe/SubscribePlan';
@@ -14,8 +11,6 @@ import Support from '../src/Documentation/Support';
 import Admin from '../src/Admin/Admin';
 import ServiceHistory from '../src/Services/ServiceHistory';
 import CarDetails from '../src/AddCar/CarDetails';
-import SignIn from '../src/Auth/SignIn';
-import ForgotPassword from '../src/Auth/ForgotPassword';
 import SubscribeSuccess from '../src/Subscribe/SubscribeSuccess';
 import BookingCardDetails from '../src/components/Booking/BookingCardDetails';
 import AdminBookingDetails from '../src/Admin/AdminBookingDetails';
@@ -23,16 +18,11 @@ import ContactDetails from './../src/Admin/ContactDetails';
 import BookingDetailsForDates from '../src/components/Booking/BookingDetailsForDates';
 import PrivacyPolicyScreen from '../src/SideScreen/Documentation';
 import FeedbackDetails from '../src/Documentation/FeedbackDetails';
+import {createStackNavigator} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
 const StackScreen = () => {
-  const [showLoginScreen, setShowLoginScreen] = useState(true);
-
-  const isAuthenticated = useSelector(
-    state => state.globalStore.isAuthenticated,
-  );
-
   useEffect(() => {
     GoogleSignin.configure({
       scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
@@ -50,7 +40,7 @@ const StackScreen = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="SignUp"
+      initialRouteName="HomeScreen"
       screenOptions={{
         headerShown: false,
         headerTintColor: '#fff',
@@ -58,15 +48,7 @@ const StackScreen = () => {
           fontWeight: 'bold',
         },
       }}>
-      {isAuthenticated === true ? (
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      ) : (
-        <>
-          <Stack.Screen name="SignUp" component={Signup} />
-          <Stack.Screen name="SignIn" component={SignIn} />
-          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-        </>
-      )}
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen
         options={{
           title: 'Profile',

@@ -25,6 +25,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LoginReducerUpdate} from '../../hooks/Slice';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
+import LoadingButton from '../components/Button/LoadingButton';
 
 const {width, height} = Dimensions.get('window');
 
@@ -34,9 +35,8 @@ const UserEditScreen = () => {
   );
   const [Name, setName] = useState();
   const [Phone, setPhone] = useState();
-  const [Email, setEmail] = useState();
   const [showSheet, setShowSheet] = useState(false);
-  const navigation = useNavigation();
+  const [Loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -107,6 +107,7 @@ const UserEditScreen = () => {
 
   const uploadImage = async () => {
     console.log(avatarSource);
+    setLoading(true);
     let fileName1 = avatarSource.substring(avatarSource?.lastIndexOf('/') + 1);
     console.log(fileName1);
     await storage()
@@ -148,7 +149,8 @@ const UserEditScreen = () => {
     dispatch(LoginReducerUpdate(userData));
     console.log(userData);
     AsyncStorage.setItem('@last_login_timestamp', JSON.stringify(userData)); // Set the initial timestamp
-    showSheetFunction();
+    hideSheet();
+    setLoading(false);
     Toast.show({
       type: 'success',
       text1: 'Success',
@@ -232,7 +234,11 @@ const UserEditScreen = () => {
                   />
                 </View>
 
-                <CustomButton onPress={() => uploadImage()} title="Confirm" />
+                <LoadingButton
+                  handleSignIn={() => uploadImage()}
+                  text="Confirm"
+                  loadingProp={Loading}
+                />
               </View>
             </View>
           </Animated.View>

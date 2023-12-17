@@ -255,8 +255,10 @@ const styles = StyleSheet.create({
     right: 35,
   },
   forgotPasswordLink: {
-    marginLeft: 230,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
     marginBottom: 20,
+    marginRight: 30,
   },
   forgotPasswordLinkText: {
     color: 'red',

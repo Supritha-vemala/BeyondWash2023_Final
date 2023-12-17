@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable prettier/prettier */
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
 import React, {useEffect} from 'react';
 import {Dimensions, Image, Platform, StyleSheet} from 'react-native';
@@ -8,14 +7,23 @@ import StackScreen from './StackScreen';
 import {styles} from '../src/components/Button/CustomButton';
 import Menu from '../src/Home/Menu';
 import ProfileScreen from '../src/SideScreen/ProfileScreen';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import SignUp from '../src/Auth/Signup';
+import SignIn from '../src/Auth/SignIn';
+import ForgotPassword from '../src/Auth/ForgotPassword';
+import {useSelector} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 const {height} = Dimensions.get('window');
 
 export default function BottomNavigation() {
+  const isAuthenticated = useSelector(
+    state => state.globalStore.isAuthenticated,
+  );
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="SignUp"
+      barStyle={{paddingBottom: 48}}
       screenOptions={({route, navigation}) => ({
         tabBarHideOnKeyboard: true,
         tabBarIcon: ({focused, size}) => {
@@ -56,15 +64,46 @@ export default function BottomNavigation() {
           top: 0,
         },
       })}>
-      <Tab.Screen
-        options={{
-          headerShown: false,
-          tabBarLabel: 'Home',
-          tabBarVisible: false,
-        }}
-        name="Home"
-        component={StackScreen}
-      />
+      {isAuthenticated === true ? (
+        <Tab.Screen
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Home',
+            tabBarVisible: false,
+          }}
+          name="Home"
+          component={StackScreen}
+        />
+      ) : (
+        <>
+          <Tab.Screen
+            name="SignUp"
+            options={{
+              headerShown: false,
+              tabBarStyle: {display: 'none'},
+            }}
+            component={SignUp}
+          />
+          <Tab.Screen
+            options={{
+              headerShown: false,
+              tabBarVisible: false,
+              tabBarStyle: {display: 'none'},
+            }}
+            name="SignIn"
+            component={SignIn}
+          />
+          <Tab.Screen
+            options={{
+              headerShown: false,
+              tabBarVisible: false,
+              tabBarStyle: {display: 'none'},
+            }}
+            name="ForgotPassword"
+            component={ForgotPassword}
+          />
+        </>
+      )}
       <Tab.Screen
         options={{
           headerShown: false,

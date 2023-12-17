@@ -22,6 +22,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {LoginReducerUpdate, SelectedCarType} from '../../hooks/Slice';
 import {useNavigation} from '@react-navigation/native';
+import LoadingButton from '../components/Button/LoadingButton';
 
 const {width, height} = Dimensions.get('window');
 
@@ -38,25 +39,6 @@ const list = [
     carType: 'SUV',
     carExample: 'Ford, Toyota, Corolla, Honda, Civic etc...',
   },
-  {
-    id: 3,
-    carImage:
-      'https://www.pngmart.com/files/22/Mercedes-Benz-AMG-Vision-PNG-Clipart.png',
-    carType: 'SUV',
-    carExample: 'BMW, Audi, Mercedes etc...',
-  },
-  {
-    id: 4,
-    carImage: 'https://www.pngmart.com/files/22/Kia-Soul-EV-PNG-Image.png',
-    carType: 'Hatchback',
-    carExample: 'That, Kia, Seltos, Rea, Xuv 300 etc..',
-  },
-  {
-    id: 5,
-    carImage: 'https://www.pngmart.com/files/22/Toyota-Fortuner-PNG-Photo.png',
-    carType: 'Hatchback',
-    carExample: 'Kia, Carnival, Fortuner, Tat, Hexa etc...',
-  },
 ];
 
 const CarDetails = () => {
@@ -71,6 +53,7 @@ const CarDetails = () => {
   const [selecteedBrandValue, setSelecteedBrandValue] = useState();
   const [selecteedModalValue, setSelecteedModalValue] = useState();
   const [selecteedTypeValue, setSelecteedTypeValue] = useState();
+  const [Loading, setLoading] = useState(false);
 
   const [brandItems, setBrandItems] = useState(ModalData);
   const [modalItems, setModalItems] = useState([]);
@@ -106,6 +89,7 @@ const CarDetails = () => {
   }
 
   const handleConfirm = async () => {
+    setLoading(true);
     const emptyValues = await checkForEmptyValues(
       selecteedBrandValue,
       selecteedModalValue,
@@ -130,7 +114,7 @@ const CarDetails = () => {
           carDetails: {
             VehicleBrand: selecteedBrandValue,
             VehicleModal: selecteedModalValue,
-            VehicleType: selecteedTypeValue,
+            VehicleType: selecteedTypeValue.bodyType,
             VehicleNumber: regValue,
             VehicleImage: list.filter(
               data => data.carType === selecteedTypeValue.bodyType,
@@ -148,7 +132,7 @@ const CarDetails = () => {
               carDetails: {
                 VehicleBrand: selecteedBrandValue,
                 VehicleModal: selecteedModalValue,
-                VehicleType: selecteedTypeValue,
+                VehicleType: selecteedTypeValue.bodyType,
                 VehicleNumber: regValue,
                 VehicleImage: list.filter(
                   data => data.carType === selecteedTypeValue.bodyType,
@@ -164,6 +148,7 @@ const CarDetails = () => {
           ); // Set the initial timestamp
           navigation.navigate('HomeScreen');
         });
+      setLoading(false);
       Toast.show({
         type: 'success',
         text1: 'Success',
@@ -278,10 +263,10 @@ const CarDetails = () => {
           multiline
         />
         <View style={styles.button}>
-          <CustomButton
-            onPress={handleConfirm}
-            customWidth={width - 20}
-            title={'Add Vehicle'}
+          <LoadingButton
+            handleSignIn={handleConfirm}
+            text={'Add Vehicle'}
+            loadingProp={Loading}
           />
         </View>
       </View>
